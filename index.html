@@ -1,658 +1,1363 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>吉隆坡行程比較：方案 A vs B</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<title>吉隆坡 2.5天行程 5/30–6/1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+  /* ── Design tokens ──────────────────────────── */
   :root {
-    --a: #2563EB;
-    --a-light: #EFF6FF;
-    --a-mid: #BFDBFE;
-    --b: #EA580C;
-    --b-light: #FFF7ED;
-    --b-mid: #FED7AA;
-    --food: #16A34A;
-    --food-bg: #DCFCE7;
-    --sight: #0284C7;
-    --sight-bg: #E0F2FE;
-    --move: #6B7280;
-    --move-bg: #F3F4F6;
-    --stay: #7C3AED;
-    --stay-bg: #EDE9FE;
-    --warn: #B45309;
-    --warn-bg: #FEF3C7;
+    --bg:          #FDF8F0;
+    --surface:     #FFFFFF;
+    --primary:     #C75B2A;
+    --primary-dim: #E8936A;
+    --green:       #2D6A4F;
+    --green-light: #D8EDD6;
+    --amber:       #D97706;
+    --amber-light: #FEF3C7;
+    --text:        #1C1917;
+    --muted:       #78716C;
+    --border:      #E7DDD2;
+    --shadow:      0 2px 8px rgba(0,0,0,0.08);
+
+    --serif: 'Noto Serif TC', serif;
+    --sans:  'Noto Sans TC', sans-serif;
+
+    --radius: 12px;
+    --radius-sm: 8px;
   }
 
+  /* ── Reset ───────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background: #F8FAFC;
-    color: #1E293B;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
     line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
   }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-  /* ── HEADER ── */
-  header {
-    background: linear-gradient(135deg, #1E3A5F 0%, #1D4ED8 50%, #0F766E 100%);
-    color: white;
-    padding: 48px 24px 40px;
-    text-align: center;
-  }
-  header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
-  header p { margin-top: 8px; opacity: 0.85; font-size: 1rem; }
-  .flight-badge {
-    display: inline-block;
-    margin-top: 16px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 99px;
-    padding: 6px 18px;
-    font-size: 0.85rem;
-    letter-spacing: 0.3px;
-  }
-
-  /* ── QUICK COMPARE ── */
-  .quick-compare {
-    max-width: 960px;
-    margin: -20px auto 0;
-    padding: 0 16px 24px;
-  }
-  .qc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-  }
-  .qc-col-header {
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.15rem;
-    padding-bottom: 12px;
-    border-bottom: 2px solid;
-    margin-bottom: 4px;
-  }
-  .qc-col-header.a { color: var(--a); border-color: var(--a); }
-  .qc-col-header.b { color: var(--b); border-color: var(--b); }
-  .qc-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid #F1F5F9;
-  }
-  .qc-item:last-child { border-bottom: none; }
-  .qc-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-  .qc-label { font-size: 0.72rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; }
-  .qc-value { font-size: 0.92rem; font-weight: 500; margin-top: 1px; }
-  .pill {
-    display: inline-block;
-    border-radius: 99px;
-    padding: 2px 10px;
-    font-size: 0.78rem;
-    font-weight: 600;
-  }
-  .pill-low { background: #DCFCE7; color: #15803D; }
-  .pill-high { background: #FEE2E2; color: #DC2626; }
-  .pill-none { background: #F1F5F9; color: #64748B; }
-  .pill-a { background: var(--a-mid); color: var(--a); }
-  .pill-b { background: var(--b-mid); color: var(--b); }
-
-  /* ── TIMELINE ── */
-  .timeline {
-    max-width: 960px;
+  /* ── Layout container ────────────────────────── */
+  .wrap {
+    max-width: 520px;
     margin: 0 auto;
-    padding: 0 16px 48px;
+    padding: 0 16px 60px;
   }
 
-  .day-block { margin-bottom: 32px; }
-
-  .day-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+  /* ── Header ──────────────────────────────────── */
+  .site-header {
+    background: var(--green);
+    color: #fff;
+    padding: 28px 20px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
   }
-  .day-header-line { flex: 1; height: 1px; background: #CBD5E1; }
-  .day-header-text {
-    background: #1E293B;
-    color: white;
-    border-radius: 99px;
-    padding: 4px 16px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    white-space: nowrap;
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 1;
+  }
+  .site-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+  }
+  .site-header h1 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .site-header .subtitle {
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
   }
 
-  .columns {
+  /* ── Info strip ──────────────────────────────── */
+  .info-strip {
+    background: var(--primary);
+    padding: 14px 20px;
+  }
+  .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .plan-col {
-    display: flex;
-    flex-direction: column;
     gap: 10px;
   }
-
-  .col-label {
-    text-align: center;
-    font-size: 0.82rem;
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 8px;
-    letter-spacing: 0.3px;
+  .info-item label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
     margin-bottom: 2px;
   }
-  .col-label.a { background: var(--a-light); color: var(--a); border: 1px solid var(--a-mid); }
-  .col-label.b { background: var(--b-light); color: var(--b); border: 1px solid var(--b-mid); }
+  .info-item span {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 500;
+  }
+  .info-item.full { grid-column: 1 / -1; }
 
-  .card {
-    background: white;
-    border-radius: 12px;
-    padding: 14px 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-    border: 1px solid #E2E8F0;
-    transition: box-shadow 0.15s, transform 0.15s;
+  /* ── Warning banner ──────────────────────────── */
+  .warning-banner {
+    background: var(--amber-light);
+    border-left: 4px solid var(--amber);
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #92400E;
   }
-  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-1px); }
-  .card.plan-a-card { border-left: 3px solid var(--a); }
-  .card.plan-b-card { border-left: 3px solid var(--b); }
-  .card.highlight-a { background: var(--a-light); border-color: var(--a-mid); border-left-color: var(--a); }
-  .card.highlight-b { background: var(--b-light); border-color: var(--b-mid); border-left-color: var(--b); }
+  .warning-banner strong { display: block; margin-bottom: 2px; }
 
-  .card-time {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #94A3B8;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
-  .card-name {
-    font-weight: 700;
-    font-size: 0.97rem;
-    color: #0F172A;
-    margin-bottom: 4px;
-  }
-  .card-name a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px dashed #94A3B8;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .card-name a:hover { color: var(--a); border-color: var(--a); }
-  .card-name a.b-link:hover { color: var(--b); border-color: var(--b); }
-  .card-desc { font-size: 0.83rem; color: #475569; margin-bottom: 8px; }
-  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag {
-    font-size: 0.70rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 99px;
-    letter-spacing: 0.3px;
-  }
-  .tag-food { background: var(--food-bg); color: var(--food); }
-  .tag-sight { background: var(--sight-bg); color: var(--sight); }
-  .tag-move { background: var(--move-bg); color: var(--move); }
-  .tag-stay { background: var(--stay-bg); color: var(--stay); }
-  .tag-warn { background: var(--warn-bg); color: var(--warn); }
-
-  .maps-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    color: #2563EB;
-    text-decoration: none;
-    margin-top: 6px;
-    opacity: 0.8;
-    transition: opacity 0.15s;
-  }
-  .maps-link:hover { opacity: 1; }
-  .maps-link svg { width: 11px; height: 11px; }
-
-  .melaka-banner {
-    grid-column: 2;
-    background: linear-gradient(135deg, #FFF7ED, #FED7AA);
-    border: 1px solid var(--b-mid);
-    border-left: 3px solid var(--b);
-    border-radius: 12px;
-    padding: 12px 16px 8px;
-    font-size: 0.82rem;
-    color: var(--b);
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 0.3px;
-  }
-  .melaka-sub { font-weight: 400; color: #92400E; font-size: 0.77rem; margin-top: 2px; }
-
-  .legend {
-    max-width: 960px;
-    margin: 0 auto 24px;
-    padding: 0 16px;
+  /* ── Plan tabs ───────────────────────────────── */
+  .plan-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    font-size: 0.78rem;
-    color: #64748B;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-
-  footer {
+  .plan-tab {
+    flex: 1;
+    padding: 12px 6px 10px;
+    border: none;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    line-height: 1.3;
     text-align: center;
-    padding: 24px;
-    font-size: 0.78rem;
-    color: #94A3B8;
-    border-top: 1px solid #E2E8F0;
+  }
+  .plan-tab .tab-label { display: block; font-size: 10px; font-weight: 400; margin-top: 1px; color: var(--muted); }
+  .plan-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+  .plan-tab.active .tab-label { color: var(--primary-dim); }
+
+  /* ── Plan panels ─────────────────────────────── */
+  .plan-panel { display: none; }
+  .plan-panel.active { display: block; }
+
+  /* ── Strategy card ───────────────────────────── */
+  .strategy {
+    margin: 16px 0;
+    padding: 14px 16px;
+    background: var(--green-light);
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--green);
+    font-size: 13px;
+    color: #1A3A2A;
+    line-height: 1.5;
+  }
+  .strategy strong { color: var(--green); }
+
+  /* ── Day cards ───────────────────────────────── */
+  .day-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .day-header {
+    padding: 14px 16px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-header:active { background: #F5F0E8; }
+  .day-date {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+  .day-label {
+    font-size: 12px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .day-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .badge-warning { background: var(--amber-light); color: #92400E; }
+  .badge-note { background: #EEF2FF; color: #3730A3; }
+  .day-toggle {
+    font-size: 14px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .day-card.collapsed .day-toggle { transform: rotate(-90deg); }
+
+  /* ── Timeline ────────────────────────────────── */
+  .timeline {
+    padding: 4px 0 8px;
+  }
+  .day-card.collapsed .timeline { display: none; }
+
+  .tl-row {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 0 10px;
+    padding: 9px 16px;
+    border-bottom: 1px solid #F5F0E8;
+    position: relative;
+  }
+  .tl-row:last-child { border-bottom: none; }
+
+  /* Dot and line */
+  .tl-row::before {
+    content: '';
+    position: absolute;
+    left: 68px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-row::after {
+    content: '';
+    position: absolute;
+    left: 64px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary-dim);
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--primary-dim);
+  }
+  .tl-row.highlight::after { background: var(--amber); box-shadow: 0 0 0 1px var(--amber); }
+  .tl-row.transport::after { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
+  .tl-row.depart::after { background: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+
+  .tl-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    padding-top: 2px;
+    text-align: right;
+    padding-right: 4px;
+  }
+  .tl-content { padding-left: 16px; }
+  .tl-place {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .tl-place a { color: var(--primary); font-weight: 600; }
+  .tl-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .tl-note .warn { color: var(--amber); font-weight: 600; }
+  .tl-note .ok { color: var(--green); font-weight: 600; }
+
+  /* ── Day note box (⚠️ warning inside day) ────── */
+  .day-notice {
+    margin: 8px 16px;
+    padding: 10px 12px;
+    background: var(--amber-light);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: #92400E;
+    line-height: 1.4;
+  }
+  .day-notice::before { content: '⚠ '; font-weight: 700; }
+
+  /* ── Section headings ────────────────────────── */
+  .section-title {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
 
-  @media (max-width: 640px) {
-    header h1 { font-size: 1.4rem; }
-    .qc-grid { grid-template-columns: 1fr; }
-    .columns { grid-template-columns: 1fr; }
-    .melaka-banner { grid-column: 1; }
+  /* ── Reference tables ────────────────────────── */
+  .ref-accordion { margin-bottom: 10px; }
+  .ref-toggle {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+  }
+  .ref-toggle .arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .ref-accordion.open .ref-toggle { border-radius: var(--radius-sm) var(--radius-sm) 0 0; border-bottom: none; }
+  .ref-accordion.open .arrow { transform: rotate(180deg); }
+  .ref-body {
+    display: none;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    overflow: hidden;
+  }
+  .ref-accordion.open .ref-body { display: block; }
+
+  .ref-item {
+    padding: 11px 16px;
+    border-bottom: 1px solid #F5F0E8;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+    align-items: start;
+  }
+  .ref-item:last-child { border-bottom: none; }
+  .ref-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .ref-type { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .ref-note { font-size: 12px; color: var(--muted); margin-top: 2px; grid-column: 1 / -1; }
+  .ref-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ref-link {
+    font-size: 11px;
+    padding: 3px 8px;
+    background: #FDF8F0;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+  .ref-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .badge-michelin { background: #FFF0F0; color: #DC2626; }
+  .badge-50best   { background: #F0F4FF; color: #2563EB; }
+  .badge-top      { background: #F0FFF4; color: #16A34A; }
+
+  /* ── Tips ────────────────────────────────────── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .tip-card {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    box-shadow: var(--shadow);
+  }
+  .tip-card .tip-icon { font-size: 20px; margin-bottom: 6px; }
+  .tip-card .tip-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tip-card .tip-body { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .tip-card a { color: var(--primary); }
+  .tip-card.full { grid-column: 1 / -1; }
+
+  /* ── Footer ──────────────────────────────────── */
+  .site-footer {
+    text-align: center;
+    padding: 20px 0 8px;
+    font-size: 11px;
+    color: var(--muted);
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>吉隆坡行程比較</h1>
-  <p>方案 A：純 KL 深度美食　vs　方案 B：KL + 馬六甲一日遊</p>
-  <div class="flight-badge">✈ 星宇航空｜去程 5/30 抵達 16:10　回程 6/1 出發 17:10</div>
+<!-- ── Header ───────────────────────────────── -->
+<header class="site-header">
+  <p class="eyebrow">Malaysia · Kuala Lumpur</p>
+  <h1>吉隆坡 2.5天行程</h1>
+  <p class="subtitle">5/30(六) – 6/1(一) · 3人 · 美食 × 景點 × 文化</p>
 </header>
 
-<!-- Quick Compare -->
-<div class="quick-compare">
-  <div class="qc-grid">
-    <div class="qc-col-header a">方案 A — 深度美食遊</div>
-    <div class="qc-col-header b">方案 B — KL + 馬六甲</div>
-
-    <div class="qc-item">
-      <div class="qc-icon">🗺️</div>
-      <div><div class="qc-label">涵蓋城市</div><div class="qc-value"><span class="pill pill-a">僅吉隆坡</span></div></div>
+<!-- ── Info strip ────────────────────────────── -->
+<div class="info-strip">
+  <div class="info-grid">
+    <div class="info-item">
+      <label>去程</label>
+      <span>11:15 → 16:10 抵KL</span>
     </div>
-    <div class="qc-item">
-      <div class="qc-icon">🗺️</div>
-      <div><div class="qc-label">涵蓋城市</div><div class="qc-value"><span class="pill pill-b">KL + 馬六甲</span></div></div>
+    <div class="info-item">
+      <label>回程</label>
+      <span>17:10 離KL → 22:05</span>
     </div>
-
-    <div class="qc-item">
-      <div class="qc-icon">🏃</div>
-      <div><div class="qc-label">移動量</div><div class="qc-value"><span class="pill pill-low">低　輕鬆</span></div></div>
+    <div class="info-item">
+      <label>住宿</label>
+      <span>Imperial KLCC · Jalan Kia Peng</span>
     </div>
-    <div class="qc-item">
-      <div class="qc-icon">🏃</div>
-      <div><div class="qc-label">移動量</div><div class="qc-value"><span class="pill pill-high">高　5/31 來回 300km</span></div></div>
+    <div class="info-item">
+      <label>機場交通</label>
+      <span>KLIA Ekspres 28min · RM55/人</span>
     </div>
-
-    <div class="qc-item">
-      <div class="qc-icon">🍽️</div>
-      <div><div class="qc-label">食物數量</div><div class="qc-value">9 家餐廳／小吃</div></div>
-    </div>
-    <div class="qc-item">
-      <div class="qc-icon">🍽️</div>
-      <div><div class="qc-label">食物數量</div><div class="qc-value">10 家（含馬六甲 4 家）</div></div>
-    </div>
-
-    <div class="qc-item">
-      <div class="qc-icon">⏰</div>
-      <div><div class="qc-label">5/31 需早起</div><div class="qc-value"><span class="pill pill-none">不用</span></div></div>
-    </div>
-    <div class="qc-item">
-      <div class="qc-icon">⏰</div>
-      <div><div class="qc-label">5/31 需早起</div><div class="qc-value"><span class="pill pill-high">07:30 出發 TBS</span></div></div>
-    </div>
-
-    <div class="qc-item">
-      <div class="qc-icon">🌃</div>
-      <div><div class="qc-label">夜生活</div><div class="qc-value"><span class="pill pill-none">無</span></div></div>
-    </div>
-    <div class="qc-item">
-      <div class="qc-icon">🌃</div>
-      <div><div class="qc-label">夜生活</div><div class="qc-value"><span class="pill pill-none">無</span></div></div>
-    </div>
-
-    <div class="qc-item">
-      <div class="qc-icon">👤</div>
-      <div><div class="qc-label">適合誰</div><div class="qc-value">純吃貨、不愛趕路</div></div>
-    </div>
-    <div class="qc-item">
-      <div class="qc-icon">👤</div>
-      <div><div class="qc-label">適合誰</div><div class="qc-value">想看古城世遺、嚐娘惹料理</div></div>
+    <div class="info-item full">
+      <label>⚑ 最晚離飯店</label>
+      <span>6/1（一）15:00 → KL Sentral → KLIA</span>
     </div>
   </div>
 </div>
 
-<!-- Legend -->
-<div class="legend">
-  <span style="font-weight:600; color:#334155">圖例：</span>
-  <span class="legend-item"><span class="tag tag-food">餐廳</span></span>
-  <span class="legend-item"><span class="tag tag-sight">景點</span></span>
-  <span class="legend-item"><span class="tag tag-move">交通</span></span>
-  <span class="legend-item"><span class="tag tag-stay">住宿</span></span>
-  <span class="legend-item"><span class="tag tag-warn">注意</span></span>
+<!-- ── Public holiday warning ────────────────── -->
+<div class="warning-banner">
+  <strong>⚠ 6/1（一）馬來西亞公假 — 國王誕辰</strong>
+  茨廠街hawker老店多半休息 · TRX Mall / KLCC Suria 商場照開 · 伴手禮龍記肉乾建議週日先買
 </div>
 
-<!-- Timeline -->
-<div class="timeline">
+<!-- ── Plan tabs ──────────────────────────────── -->
+<div class="plan-tabs" role="tablist">
+  <button class="plan-tab active" role="tab" aria-selected="true" onclick="switchPlan('a',this)">
+    方案 A<span class="tab-label">美食霸主</span>
+  </button>
+  <button class="plan-tab" role="tab" aria-selected="false" onclick="switchPlan('b',this)">
+    方案 B<span class="tab-label">文化均衡</span>
+  </button>
+  <button class="plan-tab" role="tab" aria-selected="false" onclick="switchPlan('c',this)">
+    方案 C<span class="tab-label">在地夜貓</span>
+  </button>
+</div>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════════
+     方案 A
+═══════════════════════════════════════════════ -->
+<div class="plan-panel active" id="plan-a">
+  <div class="strategy">
+    <strong>策略：</strong>按地理區塊集中火力，每餐必吃名店，景點穿插其中。三人都很能吃、不怕趕行程首選。
+  </div>
 
   <!-- Day 1 -->
-  <div class="day-block">
-    <div class="day-header">
-      <div class="day-header-line"></div>
-      <div class="day-header-text">5/30（六）傍晚抵達</div>
-      <div class="day-header-line"></div>
+  <div class="day-card" id="a-day1">
+    <div class="day-header" onclick="toggleDay('a-day1')">
+      <span class="day-date">5/30 六</span>
+      <span class="day-label">到步 ≈ 17:10</span>
+      <span class="day-badge badge-note">到步日</span>
+      <span class="day-toggle">▾</span>
     </div>
-    <div class="columns">
-      <div class="plan-col">
-        <div class="col-label a">方案 A</div>
-        <div class="card plan-a-card">
-          <div class="card-time">16:10</div>
-          <div class="card-name">抵達 KLIA → KLIA Ekspres → KL Sentral</div>
-          <div class="card-desc">車程約 35 分，直達市中心</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span></div>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">17:30</div>
-          <div class="card-name">Check in — Infini Suites @ The Robertson</div>
-          <div class="card-desc">Bukit Bintang 核心位置，鄰近亞羅街</div>
-          <div class="card-tags"><span class="tag tag-stay">住宿</span></div>
-        </div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">19:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/亞羅街美食街+kuala+lumpur" target="_blank">亞羅街美食街</a></div>
-          <div class="card-desc">露天夜市，烤魚、炒粿條、生炒牛河，邊走邊吃</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span><span class="tag tag-sight">景點</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/亞羅街美食街+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">21:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/Petaling+Street+Market+kuala+lumpur" target="_blank">茨廠街（Petaling Street）</a></div>
-          <div class="card-desc">夜市收攤前的熱鬧，可逛可買</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Petaling+Street+Market+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+    <div class="timeline">
+      <div class="tl-row transport">
+        <span class="tl-time">17:10</span>
+        <div class="tl-content">
+          <div class="tl-place">入住 Imperial KLCC</div>
+          <div class="tl-note">換裝輕裝出門</div>
         </div>
       </div>
-
-      <div class="plan-col">
-        <div class="col-label b">方案 B</div>
-        <div class="card plan-b-card">
-          <div class="card-time">16:10</div>
-          <div class="card-name">抵達 KLIA → KLIA Ekspres → KL Sentral</div>
-          <div class="card-desc">車程約 35 分</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span></div>
+      <div class="tl-row highlight">
+        <span class="tl-time">18:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://journey.tw/jalan-alor/" target="_blank">亞羅街美食街</a></div>
+          <div class="tl-note">步行≈18min或Grab 5min · <span class="warn">週六最旺，預期排隊</span></div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">17:30</div>
-          <div class="card-name">Check in — Infini Suites @ The Robertson</div>
-          <div class="card-desc">明早需 07:30 前出發，提前確認行李寄放</div>
-          <div class="card-tags"><span class="tag tag-stay">住宿</span><span class="tag tag-warn">注意</span></div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">18:30<br>–21:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://bigsharkgogogo.tw/wong-ah-wah/" target="_blank">黃亞華小食店</a> + 各攤</div>
+          <div class="tl-note">炭烤雞翅 · 螃蟹 · 炒粿條 · 沙嗲，三人分食</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">19:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/黃亞華小食店+kuala+lumpur" target="_blank">黃亞華小食店（亞羅街）</a></div>
-          <div class="card-desc">亞羅街老字號，烤雞翅 + 炒粿條，輕鬆覓食</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/黃亞華小食店+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">21:15</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.theworlds50best.com/bars/asia/the-list/penrose.html" target="_blank">Penrose KL</a></div>
+          <div class="tl-note">Asia's 50 Best #10 · Grab ≈10min · <span class="warn">需預訂（週六尤其早訂）</span></div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">21:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Petaling+Street+Market+kuala+lumpur" target="_blank">茨廠街輕逛</a></div>
-          <div class="card-desc">保留體力，明天馬六甲早起</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">22:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Day 2 -->
-  <div class="day-block">
-    <div class="day-header">
-      <div class="day-header-line"></div>
-      <div class="day-header-text">5/31（日）全天 ← 兩方案差異最大</div>
-      <div class="day-header-line"></div>
+  <div class="day-card" id="a-day2">
+    <div class="day-header" onclick="toggleDay('a-day2')">
+      <span class="day-date">5/31 日</span>
+      <span class="day-label">全天</span>
+      <span class="day-badge badge-note">全天</span>
+      <span class="day-toggle">▾</span>
     </div>
-    <div class="columns">
-      <div class="plan-col">
-        <div class="col-label a">方案 A — 全日 KL</div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">08:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/碧華樓+dim+sum+kuala+lumpur" target="_blank">碧華樓</a></div>
-          <div class="card-desc">傳統廣式點心，茶位，老派早茶氣氛</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/碧華樓+dim+sum+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">10:30</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/Batu+Caves+kuala+lumpur" target="_blank">黑風洞（Batu Caves）</a></div>
-          <div class="card-desc">印度教聖地，272 階彩色石階，車程約 30 分</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span><span class="tag tag-move">交通</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Batu+Caves+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">13:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/Village+Park+Restaurant+kuala+lumpur" target="_blank">Village Park Restaurant</a></div>
-          <div class="card-desc">冠軍椰漿飯（Nasi Lemak），常排隊建議 12:30 前到</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span><span class="tag tag-warn">注意</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Village+Park+Restaurant+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">14:30</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/Petronas+Twin+Towers+kuala+lumpur" target="_blank">雙峰塔（Petronas）+ KLCC 公園</a></div>
-          <div class="card-desc">外觀拍照黃昏最美，觀景台建議提前訂票</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Petronas+Twin+Towers+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">16:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/NZ+Curry+House+KLCC+kuala+lumpur" target="_blank">NZ Curry House @ KLCC</a></div>
-          <div class="card-desc">咖哩角、Roti Canai，KLCC 附近下午茶</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/NZ+Curry+House+KLCC+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">20:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/亦是好肉骨茶+kuala+lumpur" target="_blank">亦是好肉骨茶 / 巴生葉記（乾）肉骨茶</a></div>
-          <div class="card-desc">馬式 BKT 必試，夜間場，藥材湯底 or 乾式辣炒</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/巴生肉骨茶+kuala+lumpur" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">21:30</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/羅漢果龍眼冰糖燉冬瓜+kuala+lumpur" target="_blank">羅漢果龍眼冰糖燉冬瓜</a></div>
-          <div class="card-desc">藥膳甜水收尾，解膩又舒服</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
+    <div class="timeline">
+      <div class="tl-row highlight">
+        <span class="tl-time">06:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://en.wikipedia.org/wiki/Batu_Caves" target="_blank">Batu Caves</a></div>
+          <div class="tl-note"><span class="warn">週日人潮最多，06:30前出發搶先機</span>，07:00抵達</div>
         </div>
       </div>
-
-      <div class="plan-col">
-        <div class="col-label b">方案 B — 馬六甲日</div>
-        <div class="card plan-b-card" style="background:#FFF7ED; border-color:#FED7AA;">
-          <div class="card-time">07:30</div>
-          <div class="card-name">TBS 巴士站出發 → 馬六甲</div>
-          <div class="card-desc">Terminal Bersepadu Selatan，車程約 2 小時，票價約 MYR 10–15</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span><span class="tag tag-warn">需早起</span></div>
+      <div class="tl-row">
+        <span class="tl-time">07:00<br>–09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Batu Caves 探索</div>
+          <div class="tl-note">272彩色階梯 · 黑風洞印度神廟 · 免費入場</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">09:45</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Tengkera+Duck+Noodle+melaka" target="_blank">大樹下鴨麵（Tengkera Duck Noodle）</a></div>
-          <div class="card-desc">在地人排隊名店，鴨腿配米粉，早餐場最新鮮</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Tengkera+Duck+Noodle+melaka" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">09:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → 茨廠街</div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">11:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Jonker+Walk+melaka" target="_blank">雞場街（Jonker Walk）</a></div>
-          <div class="card-desc">世遺古街，磁磚、古董、特色小物</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Jonker+Walk+melaka" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">09:45</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.gotrip.hk/%E4%BA%9E%E6%B4%B2/%E8%8C%A8%E5%BB%A0%E8%A1%97-%E7%BE%8E%E9%A3%9F-%E5%90%89%E9%9A%86%E5%9D%A1%E8%87%AA%E7%94%B1%E8%A1%8C-gt16-1379268/" target="_blank">德昌點心 Tuck Cheong</a></div>
+          <div class="tl-note">蝦餃 · 燒賣 · 腸粉</div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">11:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Stadthuys+melaka" target="_blank">荷蘭廣場（Stadthuys）+ 聖保羅堂 + 基督教堂</a></div>
-          <div class="card-desc">紅色古蹟群步行可達，UNESCO 世遺核心區</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:30</span>
+        <div class="tl-content">
+          <div class="tl-place">龍記肉乾檔 + 羅漢果涼茶</div>
+          <div class="tl-note">伴手禮購買 · 傳統涼茶</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">13:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/McQuek+Satay+Celup+melaka" target="_blank">McQuek's Satay Celup Melaka（主店）</a></div>
-          <div class="card-desc">馬六甲獨有！串串沙爹醬料火鍋，午餐必吃</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/McQuek+Satay+Celup+melaka" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">11:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://en.wikipedia.org/wiki/Independence_Square_(Kuala_Lumpur)" target="_blank">Jamek Mosque → 獨立廣場</a></div>
+          <div class="tl-note">步行文化走讀 1hr · 大鐘樓拍打卡</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">14:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Klebang+Original+Coconut+Shake+melaka" target="_blank">Klebang Original Coconut Shake</a></div>
-          <div class="card-desc">馬六甲必喝椰子奶昔，冰涼解膩</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-          <a class="maps-link" href="https://www.google.com/maps/search/Klebang+Original+Coconut+Shake+melaka" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Maps
-          </a>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">12:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → ICC PUDU</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">15:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Putu+Piring+melaka" target="_blank">Putu Piring（椰糖米糕）</a></div>
-          <div class="card-desc">現做傳統甜點，椰糖內餡，熱吃最佳</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">12:45</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://chiefeater.com/chiefeaters/lala-noodle-icc-pudu-is-very-good/" target="_blank">上湯啦啦米粉 LaLa Noodle</a></div>
+          <div class="tl-note">蛤蜊鮮湯米粉 · 週日照常</div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">16:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Melaka+River+Cruise" target="_blank">馬六甲河遊船（River Cruise）</a></div>
-          <div class="card-desc">40 分鐘，欣賞兩岸塗鴉與古厝，日落前最美</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">13:15</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://tn92.pixnet.net/blog/post/147040630" target="_blank">亦是好肉骨茶</a></div>
+          <div class="tl-note">瓦煲肉骨茶共享</div>
         </div>
-        <div class="card plan-b-card" style="background:#FFF7ED; border-color:#FED7AA;">
-          <div class="card-time">17:30</div>
-          <div class="card-name">搭巴士回 KL</div>
-          <div class="card-desc">抵達 TBS 約 19:30，建議提前買回程票</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span><span class="tag tag-warn">注意</span></div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">14:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店午休</div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">20:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/頌記牛肉丸粉+kuala+lumpur" target="_blank">頌記牛肉丸粉</a></div>
-          <div class="card-desc">回 KL 宵夜，牛肉丸粉，輕便快速</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">16:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.petronastwintowers.com.my/" target="_blank">雙峰塔 + KLCC Park</a></div>
+          <div class="tl-note">外觀打卡 · 步行 ≈5min · <span class="ok">Skybridge需提前網購票</span></div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">17:00</span>
+        <div class="tl-content">
+          <div class="tl-place">NZ Curry House @ KLCC</div>
+          <div class="tl-note">下午咖哩點心</div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">19:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://journey.tw/hong-kee-claypot-chicken-rice/" target="_blank">鴻記馳名瓦煲雞飯</a></div>
+          <div class="tl-note">炭火悶煮 · 附葡萄牙燒魚 · 週日照常</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">21:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.theworlds50best.com/bars/asia/the-list/reka.html" target="_blank">Reka:Bar</a></div>
+          <div class="tl-note">Asia's 50 Best #47 · 科學調酒</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">22:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Day 3 -->
-  <div class="day-block">
-    <div class="day-header">
-      <div class="day-header-line"></div>
-      <div class="day-header-text">6/1（一）早上 → 15:00 機場</div>
-      <div class="day-header-line"></div>
+  <div class="day-card" id="a-day3">
+    <div class="day-header" onclick="toggleDay('a-day3')">
+      <span class="day-date">6/1 一</span>
+      <span class="day-label">截止 15:00 離店</span>
+      <span class="day-badge badge-warning">公假</span>
+      <span class="day-toggle">▾</span>
     </div>
-    <div class="columns">
-      <div class="plan-col">
-        <div class="col-label a">方案 A</div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">08:00</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/何九海南茶店+kuala+lumpur" target="_blank">何九海南茶店 / 冠記雲吞麵</a></div>
-          <div class="card-desc">銅板早餐，咖椰吐司 + 半熟蛋，道地開工飲</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">09:30</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/Petaling+Street+kuala+lumpur" target="_blank">茨廠街 + 獨立廣場</a></div>
-          <div class="card-desc">伴手禮最後補貨，拍殖民廣場</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
-        </div>
-        <div class="card plan-a-card highlight-a">
-          <div class="card-time">11:30</div>
-          <div class="card-name"><a href="https://www.google.com/maps/search/金蓮記+kuala+lumpur" target="_blank">金蓮記</a></div>
-          <div class="card-desc">招牌 BKT 或叉燒飯，最後一頓 KL 飯</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-        </div>
-        <div class="card plan-a-card">
-          <div class="card-time">13:00</div>
-          <div class="card-name">Check out → KLIA</div>
-          <div class="card-desc">Grab 或 KLIA Ekspres，15:00 前到機場</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span></div>
+    <div class="day-notice">
+      國王誕辰公假：茨廠街hawker老店可能休息。備案：TRX Mall 海腳人 或 KLCC Suria 商場確定開。
+    </div>
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-time">08:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Luckbros Kopi 或 Capitol Cafe</div>
+          <div class="tl-note">試試看有沒有開；否則飯店附近找咖啡廳</div>
         </div>
       </div>
+      <div class="tl-row">
+        <span class="tl-time">09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">茨廠街走走</div>
+          <div class="tl-note"><span class="warn">假日部分店休</span> · 龍記肉乾若有開最後補買</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.petronastwintowers.com.my/" target="_blank">雙峰塔 Skybridge</a></div>
+          <div class="tl-note"><span class="ok">公假照開</span> · 限量票提前網購</div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">12:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → 海腳人 TRX店</div>
+          <div class="tl-note"><span class="ok">公假TRX Mall確定開</span> · 海鮮炒物</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">13:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店整理行李</div>
+        </div>
+      </div>
+      <div class="tl-row depart">
+        <span class="tl-time">15:00</span>
+        <div class="tl-content">
+          <div class="tl-place">出發 → KL Sentral → KLIA Ekspres</div>
+          <div class="tl-note">17:10 航班 · 建議15:00前離飯店</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /plan-a -->
 
-      <div class="plan-col">
-        <div class="col-label b">方案 B</div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">08:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/碧華樓+dim+sum+kuala+lumpur" target="_blank">碧華樓 / 金蓮記</a></div>
-          <div class="card-desc">補回昨天沒吃到的點心，輕鬆早餐</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
+
+<!-- ══════════════════════════════════════════════
+     方案 B
+═══════════════════════════════════════════════ -->
+<div class="plan-panel" id="plan-b">
+  <div class="strategy">
+    <strong>策略：</strong>週六晚空中餐廳升級體驗；週日清晨搶攻Batu Caves（週日最旺）；精選文化+美食均衡分配，6/1公假改商場保底。
+  </div>
+
+  <!-- Day 1 -->
+  <div class="day-card" id="b-day1">
+    <div class="day-header" onclick="toggleDay('b-day1')">
+      <span class="day-date">5/30 六</span>
+      <span class="day-label">到步 ≈ 17:10</span>
+      <span class="day-badge badge-note">到步日</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-row transport">
+        <span class="tl-time">17:30</span>
+        <div class="tl-content">
+          <div class="tl-place">入住 + 步行 → KLCC Park</div>
+          <div class="tl-note"><a href="https://www.petronastwintowers.com.my/" target="_blank">雙峰塔</a>夜景 · 5min步行</div>
         </div>
-        <div class="card plan-b-card">
-          <div class="card-time">10:00</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/Petronas+Twin+Towers+kuala+lumpur" target="_blank">雙峰塔 KLCC 周邊</a></div>
-          <div class="card-desc">最後購物 + 外觀拍照</div>
-          <div class="card-tags"><span class="tag tag-sight">景點</span></div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">19:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.therooftopguide.com/rooftop-news/review-of-fuego-at-troika-sky-dining-in-kuala-lumpur.html" target="_blank">Fuego at Troika Sky Dining</a></div>
+          <div class="tl-note">23F空中餐廳 · 拉丁料理 · Grab 5min · <span class="warn">需提前訂位</span></div>
         </div>
-        <div class="card plan-b-card highlight-b">
-          <div class="card-time">12:30</div>
-          <div class="card-name"><a class="b-link" href="https://www.google.com/maps/search/海腳人+TRX+kuala+lumpur" target="_blank">海腳人 TRX 店（Hai Kah Lang）</a></div>
-          <div class="card-desc">海鮮粥、炒飯，新商場位置好找</div>
-          <div class="card-tags"><span class="tag tag-food">餐廳</span></div>
-        </div>
-        <div class="card plan-b-card">
-          <div class="card-time">14:00</div>
-          <div class="card-name">Check out → KLIA</div>
-          <div class="card-desc">Grab 或 KLIA Ekspres，15:00 前到機場</div>
-          <div class="card-tags"><span class="tag tag-move">交通</span></div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">21:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店</div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Day 2 -->
+  <div class="day-card" id="b-day2">
+    <div class="day-header" onclick="toggleDay('b-day2')">
+      <span class="day-date">5/31 日</span>
+      <span class="day-label">全天</span>
+      <span class="day-badge badge-note">全天</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-row highlight">
+        <span class="tl-time">06:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://www.feastographyblog.com/blog/batu-caves" target="_blank">Batu Caves</a></div>
+          <div class="tl-note"><span class="warn">週日最多人，06:30出發，07:00抵搶先</span></div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">07:00<br>–09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Batu Caves 探索</div>
+          <div class="tl-note">272彩色階梯 · 黑風洞印度神廟</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">09:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → 茨廠街</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">09:45</span>
+        <div class="tl-content">
+          <div class="tl-place">碧華樓</div>
+          <div class="tl-note">老牌廣式早茶</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">11:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://en.wikipedia.org/wiki/Independence_Square_(Kuala_Lumpur)" target="_blank">Jamek Mosque + 獨立廣場</a></div>
+          <div class="tl-note">文化走讀 1hr</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">12:30</span>
+        <div class="tl-content">
+          <div class="tl-place">適苑酒家</div>
+          <div class="tl-note">廣東菜午飯</div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">14:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://guide.michelin.com/us/en/kuala-lumpur-region/kuala-lumpur/restaurant/sri-nirwana-maju" target="_blank">Sri Nirwana Maju</a>（Bangsar）</div>
+          <div class="tl-note">Michelin Bib Gourmand 2026 · 香蕉葉咖哩 · <span class="warn">週日等位長，14:30後去人少</span></div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">16:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Bangsar散步</div>
+          <div class="tl-note">文青小店巡禮</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">17:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://en.wikipedia.org/wiki/Petronas_Towers" target="_blank">雙峰塔</a></div>
+          <div class="tl-note">黃昏塔影打卡</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">19:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://journey.tw/jalan-alor/" target="_blank">亞羅街美食街</a></div>
+          <div class="tl-note">三人點小份多樣（週日稍淡於週六）</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">21:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.theworlds50best.com/discovery/Establishments/Malaysia/Kuala-Lumpur/Coley.html" target="_blank">Coley</a></div>
+          <div class="tl-note">Asia's 50 Best · Gin & Coconut招牌 · Bangsar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-card" id="b-day3">
+    <div class="day-header" onclick="toggleDay('b-day3')">
+      <span class="day-date">6/1 一</span>
+      <span class="day-label">截止 15:00 離店</span>
+      <span class="day-badge badge-warning">公假</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="day-notice">
+      公假：Village Park 週一不確定是否開，建議出發前查IG · 備案：TRX Mall 海腳人。
+    </div>
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-time">07:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://therantingpanda.com/2022/11/23/food-review-village-park-nasi-lemak-in-uptown-damansara-petaling-jaya-one-of-the-best-nasi-lemak-near-kuala-lumpur/" target="_blank">Village Park Restaurant</a></div>
+          <div class="tl-note">KL最知名Nasi Lemak · Damansara · 06:30開 · <span class="warn">公假先查IG確認</span></div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">返回KL</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">09:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Capitol Cafe（若開）</div>
+          <div class="tl-note">百年老咖啡廳 · 備案：KLCC Suria 餐廳</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:30</span>
+        <div class="tl-content">
+          <div class="tl-place">龍記肉乾（若開）+ 茨廠街</div>
+          <div class="tl-note"><span class="warn">公假購物有風險，建議前一天先買</span></div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">12:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → 海腳人 TRX店</div>
+          <div class="tl-note"><span class="ok">公假TRX Mall確定開</span> · 安全選擇</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">13:30</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店收行李</div>
+        </div>
+      </div>
+      <div class="tl-row depart">
+        <span class="tl-time">15:00</span>
+        <div class="tl-content">
+          <div class="tl-place">出發 → KL Sentral → KLIA Ekspres</div>
+          <div class="tl-note">17:10 航班</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /plan-b -->
+
+
+<!-- ══════════════════════════════════════════════
+     方案 C
+═══════════════════════════════════════════════ -->
+<div class="plan-panel" id="plan-c">
+  <div class="strategy">
+    <strong>策略：</strong>週六深挖小印度+精釀酒吧；週日下午才去Batu Caves避開白天人潮，黃昏光最美；6/1公假輕鬆商場收尾。
+  </div>
+
+  <!-- Day 1 -->
+  <div class="day-card" id="c-day1">
+    <div class="day-header" onclick="toggleDay('c-day1')">
+      <span class="day-date">5/30 六</span>
+      <span class="day-label">到步 ≈ 17:10</span>
+      <span class="day-badge badge-note">到步日</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-row transport">
+        <span class="tl-time">17:10</span>
+        <div class="tl-content">
+          <div class="tl-place">入住 Imperial KLCC</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">18:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → My Biryani House Brickfields</div>
+          <div class="tl-note">小印度 · 印度扁麵包 + 羊肉咖哩</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">19:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Brickfields散步</div>
+          <div class="tl-note">印度糖果店 · 廟宇 · Little India夜間探索</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">20:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → THREE X CO</div>
+          <div class="tl-note">隱密精釀吧</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">22:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → EQ Kuala Lumpur</div>
+          <div class="tl-note">酒店Lobby Bar夜景收尾</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-card" id="c-day2">
+    <div class="day-header" onclick="toggleDay('c-day2')">
+      <span class="day-date">5/31 日</span>
+      <span class="day-label">全天</span>
+      <span class="day-badge badge-note">全天</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-time">08:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → Imbi Pasar</div>
+          <div class="tl-note"><a href="https://erisgoesto.com/2022/09/25/what-to-eat-at-icc-pudu-food-court-kuala-lumpur/" target="_blank">Imbi Pasar Mee Halia</a> 姜蛋酒米</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Capitol Cafe</div>
+          <div class="tl-note">老式咖椰土司</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://en.wikipedia.org/wiki/Independence_Square_(Kuala_Lumpur)" target="_blank">獨立廣場 + Jamek Mosque</a></div>
+          <div class="tl-note">文化打卡</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">11:00</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://flyblog.cc/jalan-petaling/" target="_blank">茨廠街</a></div>
+          <div class="tl-note">冠記雲吞麵 + 逛街</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">12:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://tn92.pixnet.net/blog/post/147040630" target="_blank">亦是好肉骨茶</a></div>
+          <div class="tl-note">午飯</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">14:00</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店午休</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">15:30</span>
+        <div class="tl-content">
+          <div class="tl-place">步行 → <a href="https://en.wikipedia.org/wiki/Petronas_Towers" target="_blank">雙峰塔</a> + KLCC Mall</div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">17:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → <a href="https://en.wikipedia.org/wiki/Batu_Caves" target="_blank">Batu Caves</a></div>
+          <div class="tl-note"><span class="ok">週日17點人已退潮</span> · 黃昏光最美</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">19:00</span>
+        <div class="tl-content">
+          <div class="tl-place">返回KL</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">20:00</span>
+        <div class="tl-content">
+          <div class="tl-place">TG's Bistro 或 Kedai Makan Ah Hee</div>
+          <div class="tl-note">輕食晚飯</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">21:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.theworlds50best.com/bars/asia/the-list/reka.html" target="_blank">Reka:Bar</a></div>
+          <div class="tl-note">Asia's 50 Best #47</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">22:30</span>
+        <div class="tl-content">
+          <div class="tl-place"><a href="https://www.theworlds50best.com/bars/asia/the-list/penrose.html" target="_blank">Penrose KL</a></div>
+          <div class="tl-note">收尾 · <span class="warn">需預訂（週日也要訂）</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-card" id="c-day3">
+    <div class="day-header" onclick="toggleDay('c-day3')">
+      <span class="day-date">6/1 一</span>
+      <span class="day-label">截止 15:00 離店</span>
+      <span class="day-badge badge-warning">公假</span>
+      <span class="day-toggle">▾</span>
+    </div>
+    <div class="day-notice">
+      公假：茨廠街hawker老店多半休息，以下選商場/清真區保底。
+    </div>
+    <div class="timeline">
+      <div class="tl-row">
+        <span class="tl-time">09:00</span>
+        <div class="tl-content">
+          <div class="tl-place">阿榮哥海南茶 或 溏記海南茶室</div>
+          <div class="tl-note">若有開 · 慢食早餐；否則飯店附近找</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Congkak</div>
+          <div class="tl-note">馬來傳統甜點（確認公假是否開）</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">11:00</span>
+        <div class="tl-content">
+          <div class="tl-place">Luckbros Kopi（若開）</div>
+          <div class="tl-note">最後一杯白咖啡</div>
+        </div>
+      </div>
+      <div class="tl-row highlight">
+        <span class="tl-time">11:30</span>
+        <div class="tl-content">
+          <div class="tl-place">Grab → 海腳人 TRX店</div>
+          <div class="tl-note"><span class="ok">公假TRX Mall確定開</span> · 安全午餐選擇</div>
+        </div>
+      </div>
+      <div class="tl-row transport">
+        <span class="tl-time">13:00</span>
+        <div class="tl-content">
+          <div class="tl-place">返回飯店整理行李</div>
+        </div>
+      </div>
+      <div class="tl-row depart">
+        <span class="tl-time">15:00</span>
+        <div class="tl-content">
+          <div class="tl-place">出發 → KL Sentral → KLIA Ekspres</div>
+          <div class="tl-note">17:10 航班</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /plan-c -->
+
+
+<!-- ══════════════════════════════════════════════
+     景點 & 美食 參考資料
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">參考資料</h2>
+
+<div class="ref-accordion" id="ref-sights">
+  <button class="ref-toggle" onclick="toggleRef('ref-sights')">
+    🏛 景點 <span class="arrow">▾</span>
+  </button>
+  <div class="ref-body">
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">雙峰塔（Petronas Twin Towers）</div>
+        <div class="ref-type">地標 · 88層 · Skybridge 41F · KLCC Park免費</div>
+      </div>
+      <span class="ref-badge badge-top">必去</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://en.wikipedia.org/wiki/Petronas_Towers" target="_blank">Wikipedia</a>
+        <a class="ref-link" href="https://www.petronastwintowers.com.my/" target="_blank">官方購票</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Batu Caves 黑風洞</div>
+        <div class="ref-type">印度廟 · 272彩色階梯 · 免費 · 06:00-21:00</div>
+      </div>
+      <span class="ref-badge badge-top">必去</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://en.wikipedia.org/wiki/Batu_Caves" target="_blank">Wikipedia</a>
+        <a class="ref-link" href="https://www.feastographyblog.com/blog/batu-caves" target="_blank">攻略</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">獨立廣場（Dataran Merdeka）</div>
+        <div class="ref-type">1957年獨立廣場 · 大鐘樓 · 蘇丹阿都沙末大廈</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://en.wikipedia.org/wiki/Independence_Square_(Kuala_Lumpur)" target="_blank">Wikipedia</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Sultan Abdul Samad Jamek Mosque</div>
+        <div class="ref-type">KL最老清真寺（1905年）· 兩河交匯 · 步行可達獨立廣場</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://en.wikipedia.org/wiki/Independence_Square_(Kuala_Lumpur)" target="_blank">區域資訊</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">茨廠街（Petaling Street）</div>
+        <div class="ref-type">KL最熱鬧唐人街 · hawker + 市集 + 老店</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://hk.trip.com/moments/poi-petaling-street-market-98120/" target="_blank">Trip.com攻略</a>
+        <a class="ref-link" href="https://flyblog.cc/jalan-petaling/" target="_blank">飛天璇食記</a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<footer>
-  資料來源：朋友的 Google My Maps 標注 ｜ 規劃日期：2026.05.22
-</footer>
+<div class="ref-accordion" id="ref-food">
+  <button class="ref-toggle" onclick="toggleRef('ref-food')">
+    🍜 美食 <span class="arrow">▾</span>
+  </button>
+  <div class="ref-body">
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">黃亞華小食店</div>
+        <div class="ref-type">燒烤夜市 · 亞羅街 · 炭烤雞翅・沙嗲</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://bigsharkgogogo.tw/wong-ah-wah/" target="_blank">鯊魚大口咬</a>
+        <a class="ref-link" href="https://flyblog.cc/wongahwah/" target="_blank">飛天璇</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">鴻記馳名瓦煲雞飯</div>
+        <div class="ref-type">炭火悶煮 · 30年老店 · 葡萄牙燒魚</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://journey.tw/hong-kee-claypot-chicken-rice/" target="_blank">許傑旅行圖中</a>
+        <a class="ref-link" href="https://hk.trip.com/moments/detail/kuala-lumpur-45-124996251/" target="_blank">Trip.com</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">上湯啦啦米粉 LaLa Noodle</div>
+        <div class="ref-type">海鮮湯麵 · ICC PUDU · 07:00–14:00</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://chiefeater.com/chiefeaters/lala-noodle-icc-pudu-is-very-good/" target="_blank">Chiefeater</a>
+        <a class="ref-link" href="https://erisgoesto.com/2022/09/25/what-to-eat-at-icc-pudu-food-court-kuala-lumpur/" target="_blank">ICC PUDU攻略</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">亦是好肉骨茶</div>
+        <div class="ref-type">瓦煲肉骨茶 · 茨廠街周邊</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://tn92.pixnet.net/blog/post/147040630" target="_blank">痞客邦遊記</a>
+        <a class="ref-link" href="https://hk.trip.com/restaurant/malaysia/kuala%20lumpur/detail/Yik%20See%20Ho%20Bak%20Kut%20Teh-36988446/" target="_blank">Trip.com</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Village Park Restaurant</div>
+        <div class="ref-type">Nasi Lemak · 炸雞腿 · Damansara · 06:30開</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://therantingpanda.com/2022/11/23/food-review-village-park-nasi-lemak-in-uptown-damansara-petaling-jaya-one-of-the-best-nasi-lemak-near-kuala-lumpur/" target="_blank">The Ranting Panda</a>
+        <a class="ref-link" href="https://sethlui.com/village-park-restaurant-malaysia/" target="_blank">Sethlui</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Sri Nirwana Maju</div>
+        <div class="ref-type">香蕉葉咖哩 · Bangsar · 印度南部料理</div>
+      </div>
+      <span class="ref-badge badge-michelin">Michelin BG</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://guide.michelin.com/us/en/kuala-lumpur-region/kuala-lumpur/restaurant/sri-nirwana-maju" target="_blank">Michelin Guide</a>
+        <a class="ref-link" href="https://www.bibzeats.com/blog/2019/12/31/food-blog-sri-nirwana-maju-banana-leaf-restaurant-bangsar-amp-subang-jaya" target="_blank">Bibz Eats</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Fuego at Troika Sky Dining</div>
+        <div class="ref-type">拉丁美洲料理 · 23F · KLCC旁 · 豬肉free · 需訂位</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://www.therooftopguide.com/rooftop-news/review-of-fuego-at-troika-sky-dining-in-kuala-lumpur.html" target="_blank">Rooftop Guide</a>
+        <a class="ref-link" href="https://fuegodining.com/" target="_blank">官方</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">德昌點心 Restoran Tuck Cheong</div>
+        <div class="ref-type">港式點心 · 茨廠街 · 早市</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://www.gotrip.hk/%E4%BA%9E%E6%B4%B2/%E8%8C%A8%E5%BB%A0%E8%A1%97-%E7%BE%8E%E9%A3%9F-%E5%90%89%E9%9A%86%E5%9D%A1%E8%87%AA%E7%94%B1%E8%A1%8C-gt16-1379268/" target="_blank">gotrip.hk</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="ref-accordion" id="ref-bars">
+  <button class="ref-toggle" onclick="toggleRef('ref-bars')">
+    🍸 酒吧 <span class="arrow">▾</span>
+  </button>
+  <div class="ref-body">
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Penrose KL</div>
+        <div class="ref-type">茨廠街 · 僅25座位 · 強烈建議提前訂位</div>
+      </div>
+      <span class="ref-badge badge-50best">#10 Asia 50</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://www.theworlds50best.com/bars/asia/the-list/penrose.html" target="_blank">Asia's 50 Best</a>
+        <a class="ref-link" href="https://www.theyumlist.net/2022/09/penrose-kl-cocktail-bar-chinatown-kuala-lumpur.html" target="_blank">The Yum List</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Reka:Bar</div>
+        <div class="ref-type">科學調酒 · 鹽脂酸熱四元素 · Bukit Damansara</div>
+      </div>
+      <span class="ref-badge badge-50best">#47 Asia 50</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://www.theworlds50best.com/bars/asia/the-list/reka.html" target="_blank">Asia's 50 Best</a>
+        <a class="ref-link" href="https://www.theyumlist.net/2021/12/rekabar-bukit-damansara-the-science-of-cocktails.html" target="_blank">The Yum List</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Coley</div>
+        <div class="ref-type">Bangsar · Gin & Coconut招牌 · 寬敞氛圍</div>
+      </div>
+      <span class="ref-badge badge-50best">Asia 50上榜</span>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://www.theworlds50best.com/discovery/Establishments/Malaysia/Kuala-Lumpur/Coley.html" target="_blank">Asia's 50 Best</a>
+        <a class="ref-link" href="https://www.scmp.com/magazines/style/luxury/article/3032524/5-kuala-lumpurs-coolest-bars-hip-crowds-master-mixologists" target="_blank">SCMP</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div>
+        <div class="ref-name">Fuego at Troika（兼酒吧）</div>
+        <div class="ref-type">拉丁風 · 23F高空 · 雞尾酒 + 餐廳</div>
+      </div>
+      <div class="ref-note ref-links">
+        <a class="ref-link" href="https://fuegodining.com/" target="_blank">官方</a>
+        <a class="ref-link" href="https://www.grazia.my/dining/feugo-troika-sky-dining/" target="_blank">Grazia</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     通用提醒
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">通用提醒</h2>
+
+<div class="tips-grid">
+  <div class="tip-card">
+    <div class="tip-icon">⛰</div>
+    <div class="tip-title">Batu Caves</div>
+    <div class="tip-body">週日人最多，07:00前到 · 女生需圍紗龍（入口有租）· 免費入場</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🎫</div>
+    <div class="tip-title">雙峰塔票</div>
+    <div class="tip-body">每日限1000人，<a href="https://www.petronastwintowers.com.my/" target="_blank">建議提前網購</a> · 週日/公假人多</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🚗</div>
+    <div class="tip-title">Grab交通</div>
+    <div class="tip-body">三人GrabCar最實惠 · 週六晚Jalan Alor周邊等車時間長，早叫車</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🚆</div>
+    <div class="tip-title">KLIA Ekspres</div>
+    <div class="tip-body"><a href="https://www.kliaekspres.com/" target="_blank">KL Sentral→KLIA</a> 28分鐘 · RM55/人 · 買票用護照</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🥩</div>
+    <div class="tip-title">龍記肉乾</div>
+    <div class="tip-body">建議週日買好，6/1公假不賭有沒有開 · 台灣海關允許帶回，需申報</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🍹</div>
+    <div class="tip-title">Penrose KL</div>
+    <div class="tip-body">僅25座位 · <a href="https://www.theworlds50best.com/bars/asia/the-list/penrose.html" target="_blank">Asia's 50 Best #10</a> · 強烈建議提前訂位，週六難搶</div>
+  </div>
+  <div class="tip-card full">
+    <div class="tip-icon">🏪</div>
+    <div class="tip-title">6/1公假保底</div>
+    <div class="tip-body">TRX Mall（海腳人） · Suria KLCC餐廳 · EQ Hotel餐廳 — 商場/酒店公假照常開。茨廠街hawker不確定，建議前一天備好</div>
+  </div>
+</div>
+
+<div class="site-footer">製於 2026.05 · 3人 · KL 2.5天</div>
+
+</div><!-- /wrap -->
+
+<script>
+function switchPlan(id, btn) {
+  document.querySelectorAll('.plan-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.plan-tab').forEach(t => {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+  });
+  document.getElementById('plan-' + id).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  // Scroll to top of tabs
+  document.querySelector('.plan-tabs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function toggleDay(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function toggleRef(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
 </body>
 </html>
